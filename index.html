@@ -1,0 +1,676 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>عيادة مبرة الفلكي التخصصي</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        cine: {
+                            dark: '#030712',
+                            card: '#0f172a',
+                            cyan: '#06b6d4',
+                            blue: '#3b82f6',
+                            gold: '#f59e0b'
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        @keyframes floatOrbs {
+            0%, 100% { transform: translateY(0px) scale(1); }
+            50% { transform: translateY(-30px) scale(1.05); }
+        }
+        .animate-float {
+            animation: floatOrbs 9s ease-in-out infinite;
+        }
+        .cine-panel {
+            background: linear-gradient(135deg, rgba(15, 23, 42, 0.75) 0%, rgba(3, 7, 18, 0.9) 100%);
+            backdrop-filter: blur(25px);
+            -webkit-backdrop-filter: blur(25px);
+            border: 1px solid rgba(6, 182, 212, 0.2);
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.9);
+        }
+        .cine-input {
+            background: rgba(3, 7, 18, 0.85);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            color: #fff;
+            transition: all 0.3s ease;
+        }
+        .cine-input:focus {
+            border-color: #06b6d4;
+            box-shadow: 0 0 25px rgba(6, 182, 212, 0.35);
+            outline: none;
+        }
+        body {
+            background-color: #030712;
+            background-image: 
+                radial-gradient(at 10% 20%, rgba(6, 182, 212, 0.15) 0px, transparent 50%),
+                radial-gradient(at 90% 80%, rgba(59, 130, 246, 0.12) 0px, transparent 50%),
+                radial-gradient(at 50% 50%, rgba(147, 51, 234, 0.08) 0px, transparent 50%);
+            color: #f8fafc;
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
+    </style>
+</head>
+<body class="font-sans antialiased selection:bg-cyan-500 selection:text-slate-950">
+
+    <!-- Ambient Floating Orbs -->
+    <div class="fixed top-1/4 -right-20 w-96 h-96 bg-cyan-500/10 rounded-full blur-[140px] pointer-events-none animate-float"></div>
+    <div class="fixed bottom-1/4 -left-20 w-96 h-96 bg-blue-600/10 rounded-full blur-[140px] pointer-events-none animate-float" style="animation-delay: 4.5s;"></div>
+
+    <!-- Notification Toast -->
+    <div id="toast" class="fixed top-24 left-1/2 -translate-x-1/2 z-50 transition-all duration-300 opacity-0 pointer-events-none">
+        <div class="cine-panel px-6 py-3 rounded-2xl border border-cyan-500/40 text-cyan-300 font-bold text-sm shadow-2xl flex items-center gap-3">
+            <i class="fa-solid fa-circle-check text-cyan-400 text-lg"></i>
+            <span id="toastText">تمت العملية بنجاح</span>
+        </div>
+    </div>
+
+    <!-- Navbar -->
+    <header class="fixed top-0 left-0 right-0 z-40 cine-panel border-b border-white/5">
+        <div class="container mx-auto px-6 py-4 flex justify-between items-center">
+            <div onclick="secretAdminTrigger()" class="flex items-center space-x-3 space-x-reverse cursor-pointer group">
+                <div class="w-12 h-12 rounded-2xl bg-gradient-to-tr from-cyan-500 to-blue-600 flex items-center justify-center shadow-lg shadow-cyan-500/30 group-hover:scale-105 transition duration-300">
+                    <i class="fa-solid fa-hospital text-slate-950 text-xl font-bold"></i>
+                </div>
+                <div>
+                    <span class="text-lg font-black tracking-wider text-white">مبرة الفلكي</span>
+                    <span class="block text-[10px] text-cyan-400 tracking-widest uppercase font-bold">Specialized Clinic</span>
+                </div>
+            </div>
+
+            <nav class="hidden md:flex space-x-8 space-x-reverse text-sm font-medium text-slate-300">
+                <a href="#home" class="hover:text-cyan-400 transition">الرئيسية</a>
+                <a href="#booking" class="hover:text-cyan-400 transition">حجز موعد</a>
+                <a href="#tracking" class="hover:text-cyan-400 transition">تتبع الدور</a>
+                <a href="#labs" class="hover:text-cyan-400 transition">التحاليل الطبية</a>
+                <a href="#location" class="hover:text-cyan-400 transition">موقعنا</a>
+            </nav>
+
+            <div>
+                <a href="#booking" class="bg-gradient-to-r from-cyan-500 to-blue-600 hover:opacity-90 text-slate-950 font-black px-6 py-2.5 rounded-xl text-sm shadow-lg shadow-cyan-500/30 transition duration-300">
+                    احجز الآن
+                </a>
+            </div>
+        </div>
+    </header>
+
+    <!-- Hero Section -->
+    <section id="home" class="relative pt-44 pb-24 px-4 text-center">
+        <div class="container mx-auto max-w-5xl relative z-10">
+            <div class="inline-flex items-center gap-2 px-4 py-2 rounded-full text-xs font-semibold bg-cyan-500/10 text-cyan-300 border border-cyan-500/20 mb-6 backdrop-blur-md">
+                <span class="w-2.5 h-2.5 rounded-full bg-cyan-400 animate-ping"></span>
+                الرعاية الطبية المتقدمة والذكية لخدمة المريض
+            </div>
+            <h1 class="text-4xl md:text-6xl font-black mb-6 leading-tight tracking-tight text-white">
+                عيادة مبرة الفلكي التخصصي <br>
+                <span class="bg-gradient-to-r from-cyan-400 via-sky-300 to-blue-500 bg-clip-text text-transparent">التميز في الرعاية الصحية الحديثة</span>
+            </h1>
+            <p class="text-slate-300 text-lg md:text-xl mb-12 max-w-2xl mx-auto leading-relaxed">
+                حجز فوري للمواعيد مع اختيار الطبيب المفضل، تنظيم دقيق للأدوار عبر واتساب، وبوابة متطورة لاستعلام التحاليل الرقمية (PDF).
+            </p>
+            <div class="flex flex-col sm:flex-row justify-center gap-4">
+                <a href="#booking" class="bg-gradient-to-r from-cyan-500 to-blue-600 text-slate-950 font-black px-8 py-4 rounded-2xl shadow-xl shadow-cyan-500/30 hover:scale-105 transition duration-300 text-center">
+                    ابدأ حجز المواعيد
+                </a>
+                <a href="#tracking" class="cine-panel hover:bg-slate-800/80 text-white font-semibold px-8 py-4 rounded-2xl transition duration-300 border border-white/10 text-center">
+                    الاستعلام عن الدور
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Main Container -->
+    <main class="container mx-auto px-4 py-12 max-w-5xl space-y-20 relative z-10">
+
+        <!-- Booking Section -->
+        <section id="booking" class="cine-panel rounded-3xl p-8 md:p-12 relative overflow-hidden">
+            <div class="text-center max-w-xl mx-auto mb-10 relative z-10">
+                <h2 class="text-3xl font-black text-white mb-3">حجز موعد جديد</h2>
+                <p class="text-slate-300 text-sm">اختر التخصص والطبيب المعالج، وسيقوم النظام بتنظيم دورك وموعد حضورك تلقائياً.</p>
+            </div>
+
+            <form id="bookingForm" onsubmit="handleBooking(event)" class="grid grid-cols-1 md:grid-cols-2 gap-6 relative z-10">
+                <div>
+                    <label class="block text-sm font-semibold text-slate-300 mb-2">اسم المريض الثلاثي</label>
+                    <input type="text" id="patientName" required class="w-full px-4 py-3.5 rounded-xl cine-input transition" placeholder="مثال: يوسف إبراهيم">
+                </div>
+                <div>
+                    <label class="block text-sm font-semibold text-slate-300 mb-2">رقم الهاتف (للتواصل والمتابعة)</label>
+                    <input type="tel" id="patientPhone" required class="w-full px-4 py-3.5 rounded-xl cine-input transition" placeholder="010XXXXXXXX">
+                </div>
+                <div>
+                    <label class="block text-sm font-semibold text-slate-300 mb-2">اختر التخصص والطبيب</label>
+                    <select id="department" required class="w-full px-4 py-3.5 rounded-xl cine-input transition">
+                        <!-- Dynamic Doctors & Departments -->
+                    </select>
+                </div>
+                <div>
+                    <label class="block text-sm font-semibold text-slate-300 mb-2">نوع الزيارة (لمنع لخبطة المواعيد)</label>
+                    <select id="visitType" class="w-full px-4 py-3.5 rounded-xl cine-input transition">
+                        <option value="كشف جديد" class="bg-slate-900">كشف جديد (حسب طابور الأرقام)</option>
+                        <option value="متابعة" class="bg-slate-900">متابعة (موعد مثبت ومحدد مع الطبيب)</option>
+                    </select>
+                </div>
+                <div class="md:col-span-2">
+                    <label class="block text-sm font-semibold text-slate-300 mb-2">ملاحظات إضافية (اختياري)</label>
+                    <textarea id="patientNotes" rows="3" class="w-full px-4 py-3.5 rounded-xl cine-input transition" placeholder="اكتب تفاصيل الحالة أو الأعراض..."></textarea>
+                </div>
+                <div class="md:col-span-2 text-center pt-2">
+                    <button type="submit" class="bg-gradient-to-r from-cyan-500 to-blue-600 hover:opacity-90 text-slate-950 font-black px-12 py-4 rounded-2xl shadow-xl shadow-cyan-500/30 transition duration-300 w-full md:w-auto">
+                        تأكيد الحجز وعرض كارت الموعد
+                    </button>
+                </div>
+            </form>
+        </section>
+
+        <!-- Booking Result Card Modal (Digital Ticket) -->
+        <div id="ticketModal" class="fixed inset-0 bg-slate-950/85 z-50 hidden flex items-center justify-center p-4 backdrop-blur-md">
+            <div class="cine-panel rounded-3xl max-w-md w-full p-8 border border-cyan-500/30 text-center shadow-2xl relative">
+                <div class="w-16 h-16 bg-cyan-500/20 text-cyan-400 rounded-3xl flex items-center justify-center mx-auto mb-4 text-2xl shadow-lg">
+                    <i class="fa-solid fa-ticket"></i>
+                </div>
+                <h3 class="text-2xl font-black text-white mb-1">تم تأكيد حجزك بنجاح!</h3>
+                <p class="text-xs text-cyan-400 font-semibold mb-6">عيادة مبرة الفلكي التخصصي</p>
+
+                <div id="ticketDetails" class="bg-slate-950/80 rounded-2xl p-5 border border-white/15 text-right space-y-3 mb-6 text-sm">
+                    <!-- Dynamic Ticket Info -->
+                </div>
+
+                <button onclick="closeTicketModal()" class="w-full bg-gradient-to-r from-cyan-500 to-blue-600 text-slate-950 font-black py-3.5 rounded-xl text-sm transition shadow-lg shadow-cyan-500/30">
+                    حسناً، تم الانتباه
+                </button>
+            </div>
+        </div>
+
+        <!-- Tracking Section -->
+        <section id="tracking" class="cine-panel rounded-3xl p-8 md:p-12">
+            <div class="text-center max-w-xl mx-auto mb-8">
+                <h2 class="text-3xl font-black text-white mb-3">متابعة حالة الحجز والدور</h2>
+                <p class="text-slate-300 text-sm">ابحث برقم هاتفك أو اسمك لمعرفة رقم دورك وحالة الموعد بدقة.</p>
+            </div>
+            <div class="flex max-w-md mx-auto gap-3 mb-8">
+                <input type="text" id="searchQuery" placeholder="أدخل رقم الهاتف أو الاسم..." class="flex-1 px-4 py-3.5 rounded-xl cine-input">
+                <button onclick="searchBooking()" class="bg-slate-900 hover:bg-slate-800 text-cyan-400 border border-cyan-500/30 px-6 py-3.5 rounded-xl font-bold transition duration-300 shadow-lg">بحث</button>
+            </div>
+            <div id="searchResult" class="max-w-md mx-auto"></div>
+        </section>
+
+        <!-- Labs Section (PDF Only) -->
+        <section id="labs" class="cine-panel rounded-3xl p-8 md:p-12">
+            <div class="text-center max-w-xl mx-auto mb-8">
+                <h2 class="text-3xl font-black text-white mb-3">بوابة نتائج التحاليل (PDF)</h2>
+                <p class="text-slate-300 text-sm">ادخل رقم هاتفك لتحميل تقرير التحاليل الطبية المعتمد بصيغة PDF.</p>
+            </div>
+            <div class="flex max-w-md mx-auto gap-3 mb-8">
+                <input type="tel" id="labSearchPhone" placeholder="أدخل رقم هاتف المريض..." class="flex-1 px-4 py-3.5 rounded-xl cine-input">
+                <button onclick="searchLabResult()" class="bg-gradient-to-r from-cyan-500 to-blue-600 text-slate-950 font-black px-6 py-3.5 rounded-xl hover:opacity-90 transition duration-300 shadow-lg">استعلام</button>
+            </div>
+            <div id="labResultContainer" class="max-w-md mx-auto"></div>
+        </section>
+
+        <!-- Location & Social Grid -->
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+            <section id="location" class="cine-panel rounded-3xl p-8 flex flex-col justify-between">
+                <div>
+                    <h3 class="text-xl font-bold text-white mb-4 flex items-center gap-2"><i class="fa-solid fa-location-dot text-cyan-400"></i> موقع العيادة</h3>
+                    <p class="text-slate-300 text-sm mb-6 leading-relaxed">الإسكندرية - السيوف، 16 الإصلاح - أعلى الراعي لمستحضرات التجميل، الدور الثالث.</p>
+                </div>
+                <a href="https://maps.app.goo.gl/Vd7zG6azmANMaAnq6" target="_blank" class="bg-slate-950/90 hover:bg-slate-900 text-cyan-400 border border-cyan-500/30 py-3 px-4 rounded-xl text-xs font-bold transition text-center shadow-lg flex items-center justify-center gap-2">
+                    <i class="fa-solid fa-map-location-dot text-sm"></i> افتح الموقع على خرائط جوجل (Google Maps)
+                </a>
+            </section>
+
+            <!-- Facebook Community Section -->
+            <section class="cine-panel rounded-3xl p-8 flex flex-col justify-between border border-blue-500/30">
+                <div>
+                    <h3 class="text-xl font-bold text-white mb-3 flex items-center gap-2"><i class="fa-brands fa-facebook text-blue-500"></i> تابع عائلتنا الطبية</h3>
+                    <p class="text-slate-300 text-sm mb-6 leading-relaxed">انضم لعائلتنا الطبية وتابع أحدث العروض، النصائح الصحية اليومية، وتجارب المرضى عبر صفحتنا الرسمية على الفيسبوك.</p>
+                </div>
+                <a href="https://www.facebook.com/share/19c4vUy9B1/" target="_blank" class="w-full bg-gradient-to-r from-blue-600 to-cyan-600 hover:opacity-90 text-white font-bold py-3.5 rounded-xl text-sm transition text-center shadow-lg shadow-blue-500/30 flex items-center justify-center gap-2">
+                    <i class="fa-brands fa-facebook-f text-lg"></i> تابع صفحتنا الرسمية الآن
+                </a>
+            </section>
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <footer class="border-t border-white/10 bg-slate-950/95 py-8 mt-24 text-center text-slate-400 text-sm">
+        <div class="container mx-auto px-4 flex flex-col sm:flex-row justify-between items-center gap-4">
+            <p>عيادة مبرة الفلكي التخصصي © 2026</p>
+            <div class="flex items-center gap-4">
+                <a href="https://www.facebook.com/share/19c4vUy9B1/" target="_blank" class="text-blue-400 hover:text-white transition flex items-center gap-1 text-xs font-bold">
+                    <i class="fa-brands fa-facebook text-base"></i> تابعنا على الفيسبوك
+                </a>
+                <div class="flex items-center gap-2 text-cyan-400 bg-cyan-500/10 px-4 py-2 rounded-xl border border-cyan-500/30">
+                    <i class="fa-brands fa-whatsapp text-lg"></i>
+                    <span class="text-xs font-bold">الدعم الفني متاح 24/7</span>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Password Prompt Modal (Secret) -->
+    <div id="passwordModal" class="fixed inset-0 bg-slate-950/90 z-50 hidden flex items-center justify-center p-4 backdrop-blur-md">
+        <div class="cine-panel rounded-3xl max-w-sm w-full p-8 border border-cyan-500/30 text-center shadow-2xl">
+            <div class="w-12 h-12 bg-cyan-500/20 text-cyan-400 rounded-2xl flex items-center justify-center mx-auto mb-4 text-xl">
+                <i class="fa-solid fa-lock"></i>
+            </div>
+            <h3 class="text-xl font-black text-white mb-2">دخول لوحة الأدمن</h3>
+            <p class="text-slate-300 text-xs mb-6">أدخل كلمة المرور الخاصة بإدارة عيادة مبرة الفلكي</p>
+            
+            <input type="password" id="adminPasswordInput" placeholder="أدخل كلمة المرور..." class="w-full px-4 py-3.5 cine-input rounded-xl text-sm mb-4 text-center">
+            
+            <div class="flex gap-2">
+                <button onclick="verifyAdminPassword()" class="flex-1 bg-gradient-to-r from-cyan-500 to-blue-600 text-slate-950 font-black py-3 rounded-xl text-sm transition">دخول</button>
+                <button onclick="closePasswordModal()" class="flex-1 bg-slate-800 hover:bg-slate-700 text-slate-300 font-bold py-3 rounded-xl text-sm transition">إلغاء</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Admin Dashboard Modal -->
+    <div id="adminModal" class="fixed inset-0 bg-slate-950/90 z-50 hidden flex items-center justify-center p-4 backdrop-blur-md">
+        <div class="cine-panel rounded-3xl max-w-5xl w-full max-h-[90vh] overflow-y-auto p-8 relative border border-cyan-500/30 text-right shadow-2xl">
+            <button onclick="toggleAdminModal()" class="absolute top-6 left-6 text-slate-400 hover:text-white text-xl"><i class="fa-solid fa-xmark"></i></button>
+            <h2 class="text-2xl font-black text-white mb-6 border-b border-white/10 pb-4 flex items-center gap-3">
+                <i class="fa-solid fa-shield-halved text-cyan-400"></i> لوحة تقارير وإدارة أطباء وتخصصات مبرة الفلكي
+            </h2>
+            
+            <!-- Departments Management Section -->
+            <div class="cine-panel p-6 rounded-2xl border border-cyan-500/20 mb-8">
+                <h3 class="font-bold text-white mb-4 text-sm"><i class="fa-solid fa-stethoscope text-cyan-400 ml-2"></i> إضافة وإدارة الأطباء والتخصصات</h3>
+                <div class="grid grid-cols-1 sm:grid-cols-4 gap-3 mb-4">
+                    <input type="text" id="newDeptName" placeholder="التخصص (مثال: أسنان)..." class="px-4 py-2.5 cine-input rounded-xl text-sm">
+                    <input type="text" id="newDocName" placeholder="اسم الدكتور (مثال: د. أحمد)..." class="px-4 py-2.5 cine-input rounded-xl text-sm">
+                    <input type="text" id="newDocTime" placeholder="وقت الحضور (مثال: 06:00 م)..." class="px-4 py-2.5 cine-input rounded-xl text-sm">
+                    <button onclick="addDepartment()" class="bg-gradient-to-r from-cyan-500 to-blue-600 text-slate-950 font-black rounded-xl text-sm hover:opacity-90 transition shadow-lg">إضافة طبيب جديد</button>
+                </div>
+                <div class="overflow-x-auto border border-white/10 rounded-xl mt-4">
+                    <table class="w-full text-right text-xs">
+                        <thead class="bg-white/5 text-slate-300">
+                            <tr>
+                                <th class="p-3">التخصص</th>
+                                <th class="p-3">الطبيب المعالج</th>
+                                <th class="p-3">وقت حضور الطبيب</th>
+                                <th class="p-3">إجراء</th>
+                            </tr>
+                        </thead>
+                        <tbody id="adminDeptsTable" class="text-slate-300"></tbody>
+                    </table>
+                </div>
+            </div>
+
+            <!-- Daily Report Stats -->
+            <div id="adminStatsContainer" class="grid grid-cols-2 sm:grid-cols-4 gap-4 mb-8">
+                <!-- Dynamic Department Stats -->
+            </div>
+
+            <!-- Upload PDF Lab Result -->
+            <div class="cine-panel p-6 rounded-2xl border border-white/10 mb-8">
+                <h3 class="font-bold text-white mb-3 text-sm">رفع نتيجة تحليل جديدة للمريض (PDF)</h3>
+                <div class="grid grid-cols-1 sm:grid-cols-3 gap-3">
+                    <input type="tel" id="labPhone" placeholder="رقم هاتف المريض..." class="px-4 py-2.5 cine-input rounded-xl text-sm">
+                    <input type="file" id="labPdfFile" accept=".pdf" class="px-4 py-2 cine-input rounded-xl text-sm file:bg-cyan-500 file:text-slate-950 file:border-0 file:rounded-lg file:py-1 file:px-3 file:font-bold">
+                    <button onclick="uploadLabResult()" class="bg-gradient-to-r from-cyan-500 to-blue-600 text-slate-950 font-black rounded-xl text-sm hover:opacity-90 transition shadow-lg">رفع وحفظ التقرير</button>
+                </div>
+                <p id="uploadStatus" class="text-xs mt-2 font-medium"></p>
+            </div>
+
+            <!-- Table -->
+            <h3 class="font-bold text-white mb-4 text-sm">سجل الحجوزات وإدارة الحالات اليومية</h3>
+            <div class="overflow-x-auto border border-white/10 rounded-2xl">
+                <table class="w-full text-right text-sm">
+                    <thead class="bg-white/5 text-slate-300">
+                        <tr>
+                            <th class="p-4">الدور</th>
+                            <th class="p-4">اسم المريض</th>
+                            <th class="p-4">الهاتف</th>
+                            <th class="p-4">التخصص والطبيب</th>
+                            <th class="p-4">حالة الحجز (تعديل)</th>
+                        </tr>
+                    </thead>
+                    <tbody id="adminBookingsTable" class="text-slate-300"></tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <!-- Script Logic -->
+    <script>
+        let bookings = JSON.parse(localStorage.getItem('mabara_bookings')) || [];
+        let labResults = JSON.parse(localStorage.getItem('mabara_labs')) || [];
+        
+        let departments = JSON.parse(localStorage.getItem('mabara_depts')) || [
+            { id: 1, name: 'أسنان', doctor: 'د. محمد الفلكي (الفترة الصباحية)', time: '02:00 ظهراً' },
+            { id: 2, name: 'أسنان', doctor: 'د. أحمد سعيد (الفترة المسائية)', time: '07:00 مساءً' },
+            { id: 3, name: 'علاج طبيعي', doctor: 'د. سارة محمود', time: '05:00 عصراً' },
+            { id: 4, name: 'باطنة', doctor: 'د. خالد إبراهيم', time: '06:00 مساءً' },
+            { id: 5, name: 'أطفال', doctor: 'د. مريم علي', time: '07:00 مساءً' }
+        ];
+
+        const dentalWhatsApp = "201234567890"; 
+        const therapyWhatsApp = "201098765432"; 
+        const adminCorrectPassword = "123";
+
+        function showToast(message) {
+            const toast = document.getElementById('toast');
+            document.getElementById('toastText').innerText = message;
+            toast.style.opacity = '1';
+            setTimeout(() => {
+                toast.style.opacity = '0';
+            }, 3500);
+        }
+
+        function renderDepartmentsDropdown() {
+            const select = document.getElementById('department');
+            let options = '<option value="" class="bg-slate-900">اختر التخصص والطبيب المعالج...</option>';
+            departments.forEach((d, index) => {
+                options += `<option value="${index}" class="bg-slate-900">🩺 ${d.name} ◄ الطبيب: ${d.doctor} (${d.time})</option>`;
+            });
+            select.innerHTML = options;
+        }
+        renderDepartmentsDropdown();
+
+        let clickCount = 0;
+        function secretAdminTrigger() {
+            clickCount++;
+            if (clickCount === 3) {
+                clickCount = 0;
+                document.getElementById('passwordModal').classList.remove('hidden');
+            }
+            setTimeout(() => { clickCount = 0; }, 2000);
+        }
+
+        function closePasswordModal() {
+            document.getElementById('passwordModal').classList.add('hidden');
+            document.getElementById('adminPasswordInput').value = '';
+        }
+
+        function verifyAdminPassword() {
+            const enteredPassword = document.getElementById('adminPasswordInput').value;
+            if (enteredPassword === adminCorrectPassword) {
+                closePasswordModal();
+                toggleAdminModal();
+            } else {
+                showToast('كلمة المرور غير صحيحة!');
+                document.getElementById('adminPasswordInput').value = '';
+            }
+        }
+
+        function handleBooking(event) {
+            event.preventDefault();
+            const name = document.getElementById('patientName').value;
+            const phone = document.getElementById('patientPhone').value;
+            const deptIndex = document.getElementById('department').value;
+            const visitType = document.getElementById('visitType').value;
+            const notes = document.getElementById('patientNotes').value;
+
+            const selectedDept = departments[deptIndex];
+            const deptName = selectedDept ? selectedDept.name : 'عام';
+            const doctorName = selectedDept ? selectedDept.doctor : 'طبيب العيادة';
+            const doctorTime = selectedDept ? selectedDept.time : 'حسب الموعد';
+
+            const todayCount = bookings.filter(b => b.date === new Date().toLocaleDateString()).length + 1;
+            const queueNumber = `#${String(todayCount).padStart(2, '0')}`;
+
+            const newBooking = {
+                id: Date.now(),
+                name,
+                phone,
+                dept: deptName,
+                doctor: doctorName,
+                time: doctorTime,
+                visitType,
+                notes,
+                queueNumber,
+                status: 'قيد الانتظار',
+                date: new Date().toLocaleDateString()
+            };
+
+            bookings.push(newBooking);
+            localStorage.setItem('mabara_bookings', JSON.stringify(bookings));
+
+            showTicketCard(newBooking);
+            document.getElementById('bookingForm').reset();
+            showToast(`تم الحجز بنجاح! رقم دورك: ${queueNumber}`);
+
+            if (deptName === 'أسنان' || deptName === 'علاج طبيعي') {
+                const targetNumber = deptName === 'أسنان' ? dentalWhatsApp : therapyWhatsApp;
+                const message = `مرحباً، أود تأكيد حجزي في عيادة مبرة الفلكي التخصصي:\n- القسم: ${deptName}\n- الطبيب: ${doctorName}\n- وقت الحضور: ${doctorTime}\n- الاسم: ${name}\n- الهاتف: ${phone}\n- نوع الزيارة: ${visitType}\n- رقم الدور: ${queueNumber}`;
+                window.open(`https://wa.me/${targetNumber}?text=${encodeURIComponent(message)}`, '_blank');
+            }
+        }
+
+        function showTicketCard(b) {
+            const ticketDiv = document.getElementById('ticketDetails');
+            ticketDiv.innerHTML = `
+                <p class="text-white"><strong>اسم المريض:</strong> ${b.name}</p>
+                <p class="text-white"><strong>التخصص:</strong> ${b.dept}</p>
+                <p class="text-cyan-400"><strong>الطبيب المعالج:</strong> ${b.doctor}</p>
+                <p class="text-amber-400"><strong>موعد حضور الطبيب:</strong> ${b.time}</p>
+                <p class="text-white"><strong>رقم الدور:</strong> <span class="text-cyan-400 font-black text-lg">${b.queueNumber}</span></p>
+                <p class="text-slate-300"><strong>نوع الزيارة:</strong> ${b.visitType}</p>
+            `;
+            document.getElementById('ticketModal').classList.remove('hidden');
+        }
+
+        function closeTicketModal() {
+            document.getElementById('ticketModal').classList.add('hidden');
+        }
+
+        function searchBooking() {
+            const query = document.getElementById('searchQuery').value.trim();
+            const resultDiv = document.getElementById('searchResult');
+            if (!query) {
+                resultDiv.innerHTML = '<p class="text-rose-400 text-sm text-center">أدخل رقم الهاتف أو الاسم للبحث.</p>';
+                return;
+            }
+
+            const found = bookings.filter(b => b.phone.includes(query) || b.name.includes(query));
+            if (found.length === 0) {
+                resultDiv.innerHTML = '<p class="text-slate-400 text-sm text-center">لا توجد حجوزات مطابقة.</p>';
+                return;
+            }
+
+            let html = '<div class="space-y-3">';
+            found.forEach(b => {
+                html += `
+                    <div class="cine-panel p-4 rounded-xl text-sm border border-cyan-500/20 space-y-1">
+                        <p class="text-white"><strong>الاسم:</strong> ${b.name}</p>
+                        <p class="text-slate-300"><strong>التخصص والطبيب:</strong> ${b.dept} (${b.doctor})</p>
+                        <p class="text-amber-400"><strong>موعد الحضور:</strong> ${b.time}</p>
+                        <p class="text-slate-300"><strong>رقم الدور:</strong> <span class="text-cyan-400 font-bold">${b.queueNumber}</span></p>
+                        <p class="text-slate-300"><strong>الحالة:</strong> <span class="text-emerald-400 font-semibold">${b.status}</span></p>
+                    </div>
+                `;
+            });
+            html += '</div>';
+            resultDiv.innerHTML = html;
+        }
+
+        function addDepartment() {
+            const name = document.getElementById('newDeptName').value.trim();
+            const doctor = document.getElementById('newDocName').value.trim();
+            const time = document.getElementById('newDocTime').value.trim();
+
+            if (!name || !doctor || !time) {
+                showToast('الرجاء إدخال تفاصيل التخصص والطبيب ووقت الحضور.');
+                return;
+            }
+
+            departments.push({ id: Date.now(), name, doctor, time });
+            localStorage.setItem('mabara_depts', JSON.stringify(departments));
+            renderDepartmentsDropdown();
+            loadAdminData();
+
+            document.getElementById('newDeptName').value = '';
+            document.getElementById('newDocName').value = '';
+            document.getElementById('newDocTime').value = '';
+            showToast('تمت إضافة الطبيب بنجاح!');
+        }
+
+        function deleteDepartment(id) {
+            departments = departments.filter(d => d.id !== id);
+            localStorage.setItem('mabara_depts', JSON.stringify(departments));
+            renderDepartmentsDropdown();
+            loadAdminData();
+            showToast('تم حذف الطبيب بنجاح!');
+        }
+
+        function uploadLabResult() {
+            const phone = document.getElementById('labPhone').value.trim();
+            const fileInput = document.getElementById('labPdfFile');
+            const status = document.getElementById('uploadStatus');
+
+            if (!phone || fileInput.files.length === 0) {
+                status.className = 'text-xs mt-2 font-medium text-rose-400';
+                status.innerText = 'أدخل رقم الهاتف واجلب ملف PDF.';
+                return;
+            }
+
+            const file = fileInput.files[0];
+            const reader = new FileReader();
+
+            reader.onload = function(e) {
+                try {
+                    const base64Data = e.target.result;
+                    const labRecord = {
+                        phone: phone,
+                        fileName: file.name,
+                        fileData: base64Data
+                    };
+
+                    labResults.push(labRecord);
+                    localStorage.setItem('mabara_labs', JSON.stringify(labResults));
+
+                    status.className = 'text-xs mt-2 font-medium text-emerald-400';
+                    status.innerText = 'تم رفع وحفظ ملف الـ PDF بنجاح!';
+                    document.getElementById('labPhone').value = '';
+                    fileInput.value = '';
+                    showToast('تم حفظ تقرير التحليل بنجاح!');
+                } catch (err) {
+                    status.className = 'text-xs mt-2 font-medium text-rose-400';
+                    status.innerText = 'حجم الملف كبير جداً على الذاكرة المحلية.';
+                }
+            };
+
+            reader.readAsDataURL(file);
+        }
+
+        function searchLabResult() {
+            const phone = document.getElementById('labSearchPhone').value.trim();
+            const container = document.getElementById('labResultContainer');
+            const result = labResults.find(l => l.phone === phone);
+
+            if (!result) {
+                container.innerHTML = '<p class="text-rose-400 text-sm text-center">لا توجد نتائج تحليل مسجلة لهذا الرقم.</p>';
+                return;
+            }
+
+            container.innerHTML = `
+                <div class="cine-panel p-5 rounded-2xl text-center border border-cyan-500/30">
+                    <p class="text-sm font-semibold text-cyan-200 mb-3">تقرير التحاليل جاهز (${result.fileName})</p>
+                    <a href="${result.fileData}" download="${result.fileName}" class="inline-block bg-cyan-500 hover:bg-cyan-400 text-slate-950 text-xs px-6 py-3 rounded-xl font-bold transition shadow-lg">تحميل التقرير PDF الآن</a>
+                </div>
+            `;
+        }
+
+        function toggleAdminModal() {
+            const modal = document.getElementById('adminModal');
+            modal.classList.toggle('hidden');
+            if (!modal.classList.contains('hidden')) {
+                loadAdminData();
+            }
+        }
+
+        function updateBookingStatus(id, newStatus) {
+            const booking = bookings.find(b => b.id === id);
+            if (booking) {
+                booking.status = newStatus;
+                localStorage.setItem('mabara_bookings', JSON.stringify(bookings));
+                loadAdminData();
+            }
+        }
+
+        function loadAdminData() {
+            const today = new Date().toLocaleDateString();
+            const todayBookings = bookings.filter(b => b.date === today);
+
+            let deptsRows = '';
+            departments.forEach(d => {
+                deptsRows += `
+                    <tr class="border-b border-white/5 hover:bg-white/5 transition">
+                        <td class="p-3 font-bold text-cyan-400">${d.name}</td>
+                        <td class="p-3">${d.doctor}</td>
+                        <td class="p-3 text-amber-400">${d.time}</td>
+                        <td class="p-3">
+                            <button onclick="deleteDepartment(${d.id})" class="bg-rose-500/20 text-rose-400 hover:bg-rose-500 hover:text-white px-3 py-1 rounded-lg transition text-xs">حذف</button>
+                        </td>
+                    </tr>
+                `;
+            });
+            document.getElementById('adminDeptsTable').innerHTML = deptsRows;
+
+            let statsHtml = '';
+            departments.forEach(d => {
+                const count = todayBookings.filter(b => b.dept === d.name && b.doctor === d.doctor).length;
+                statsHtml += `
+                    <div class="cine-panel p-4 rounded-2xl border border-cyan-500/20 text-center">
+                        <p class="text-xs text-cyan-400 font-semibold mb-1">${d.name}</p>
+                        <p class="text-xs text-slate-300 truncate">${d.doctor}</p>
+                        <p class="text-2xl font-black text-white mt-1">${count}</p>
+                    </div>
+                `;
+            });
+            document.getElementById('adminStatsContainer').innerHTML = statsHtml;
+
+            const tbody = document.getElementById('adminBookingsTable');
+            if (bookings.length === 0) {
+                tbody.innerHTML = '<tr><td colspan="5" class="p-6 text-center text-slate-500">لا توجد حجوزات مسجلة حالياً</td></tr>';
+                return;
+            }
+
+            let rows = '';
+            bookings.slice().reverse().forEach(b => {
+                let statusColor = 'text-amber-400';
+                if (b.status === 'مؤكد') statusColor = 'text-emerald-400';
+                if (b.status === 'ملغي') statusColor = 'text-rose-400';
+
+                rows += `
+                    <tr class="border-b border-white/5 hover:bg-white/5 transition">
+                        <td class="p-4 font-black text-cyan-400">${b.queueNumber}</td>
+                        <td class="p-4 text-white">${b.name}</td>
+                        <td class="p-4 dir-ltr">${b.phone}</td>
+                        <td class="p-4">${b.dept} <br><span class="text-xs text-cyan-300">${b.doctor} (${b.time})</span></td>
+                        <td class="p-4">
+                            <div class="flex items-center gap-2">
+                                <span class="font-bold ${statusColor} text-xs ml-2">${b.status}</span>
+                                <select onchange="updateBookingStatus(${b.id}, this.value)" class="bg-slate-900 border border-cyan-500/30 text-xs text-white rounded-lg px-2 py-1.5 focus:outline-none">
+                                    <option value="" disabled selected>تغيير...</option>
+                                    <option value="مؤكد">مؤكد 🟢</option>
+                                    <option value="قيد الانتظار">قيد الانتظار 🟡</option>
+                                    <option value="ملغي">ملغي 🔴</option>
+                                </select>
+                            </div>
+                        </td>
+                    </tr>
+                `;
+            });
+            tbody.innerHTML = rows;
+        }
+
+        function rateClinic(stars) {
+            document.getElementById('ratingMessage').innerText = `شكراً لتقييمك لمنظومة عيادة مبرة الفلكي التخصصي (${stars} نجوم)!`;
+        }
+    </script>
+</body>
+</html>
